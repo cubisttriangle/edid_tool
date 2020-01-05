@@ -1,4 +1,4 @@
-from modules.EdidChunk import EdidChunk
+from modules.EdidChunkContainer import EdidChunkContainer
 from modules.EdidHeader import EdidHeader
 from modules.BasicDisplayParameters import BasicDisplayParameters
 from modules.ChromaticityCoordinates import ChromaticityCoordinates
@@ -7,10 +7,10 @@ from modules.StandardTimingInfo import StandardTimingInfo
 
 import struct
 
-class Edid( EdidChunk ):
+class Edid( EdidChunkContainer ):
 
     attributes = [ 'edid_header', 'basic_display_parameters', 'chromaticity_coordinates',
-                   'standard_timing_info' ]
+                   'established_timings', 'standard_timing_info' ]
 
     def __init__( self ):
 
@@ -18,28 +18,15 @@ class Edid( EdidChunk ):
         self.edid_header = EdidHeader()
         self.basic_display_parameters = BasicDisplayParameters()
         self.chromaticity_coordinates = ChromaticityCoordinates()
+        self.established_timings = EstablishedTimingBitmap()
         self.standard_timing_info = StandardTimingInfo()
 
     def load_from_file( self, file_path ):
 
         with open( file_path, mode = 'rb' ) as edid_file:
             contents = edid_file.read()
+            if len( contents ) == 0:
+                raise ValueError( "Edid file is empty: '{}'".format( file_path ) )
             byte_format = "B" * ( len( contents ) // 1 )
             edid_bytes = struct.unpack( byte_format, contents )
             self.set_bytes( edid_bytes )
-
-    def set_bytes( self, byte_array ):
-
-        self.bytes = byte_array
-
-        for attr in self.attributes:
-            self.__getattribute__( attr ).get_bytes_from_edid_byte_array( self.bytes )
-
-    def human_readable( self, indent = 0 ):
-
-        s = "\n"
-
-        for attr in self.attributes:
-            s = s + "{}\n".format( self.__getattribute__( attr ).info( indent + 1 ) )
-
-        return s

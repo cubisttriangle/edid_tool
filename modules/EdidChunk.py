@@ -1,4 +1,3 @@
-
 class EdidChunk( object ):
 
     def __init__( self, name, byte_offset, chunk_len, byte_array = None ):
@@ -26,7 +25,9 @@ class EdidChunk( object ):
         end = self.byte_offset + self.chunk_len
 
         if len( byte_array ) < end:
-            raise ValueError( "EDID array is not long enough." )
+            raise ValueError( "EDID array is not long enough. Expecting {} but got {}.".format(
+                end, len( byte_array )
+            ) )
 
         self.set_bytes( byte_array[ self.byte_offset : end ] )
 
@@ -38,8 +39,8 @@ class EdidChunk( object ):
         if not isinstance( byte_array, ( list, tuple ) ):
             raise ValueError( "byte_array must be a list of bytes, but it's a {}.".format( type( byte_array ) ) )
 
-        if len( byte_array ) != self.chunk_len:
-            raise ValueError( "byte_array should {} bytes long, but it is only {} bytes long.".format ( self.chunk_len, len( byte_array ) ) )
+        if len( byte_array ) > self.chunk_len:
+            raise ValueError( "byte_array should {} bytes long, but it is {} bytes long.".format ( self.chunk_len, len( byte_array ) ) )
 
     def format_byte( self, b ):
 
@@ -53,17 +54,17 @@ class EdidChunk( object ):
         return "{}{}".format( "  " * indented_no, string )
 
     def info( self, indent = 0 ):
-        byte_str = self.indented( "Bytes: {}".format( self.__str__() ), indent + 1 )
-        readable = self.indented( "Interpreted: {}".format( self.human_readable( indent + 1 ) ), indent + 1 )
-        info_str = "{}:\n\n{}\n\n{}\n".format( self.name, byte_str, readable )
+        byte_str = self.indented( "Bytes[{}]: {}".format( len( self.bytes ), self.__str__() ), indent + 1 )
+        readable = self.indented( "Interpretation: {}".format( self.human_readable( indent + 1 ) ), indent + 1 )
+        info_str = "{}:\n\n{}\n{}\n".format( self.name, byte_str, readable )
         return self.indented( info_str, indent )
 
-    # Can be overriden to clear all attributes
+    # Can be overridden to clear all attributes
     def clear( self ):
 
         self.clear_bytes()
 
-    # Can be overriden to parse the byte array and set other member variables.
+    # Can be overridden to parse the byte array and set other member variables.
     def set_bytes( self, byte_array ):
 
         self.validate_byte_array( byte_array )
