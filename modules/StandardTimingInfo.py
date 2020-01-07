@@ -10,7 +10,9 @@ class StandardTimingInfo( EdidChunk ):
     }
 
     def __init__( self ):
-        super( StandardTimingInfo, self ).__init__( "Standard Timing Information", 38, 16 )
+        # Initialize to 'unused' values.
+        b = [ 0x01 for i in range( 0, 15 ) ]
+        super( StandardTimingInfo, self ).__init__( "Standard Timing Information", 38, 16, b )
 
     def human_readable( self, indent_no = 0 ):
 

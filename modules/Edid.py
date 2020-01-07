@@ -4,13 +4,15 @@ from modules.BasicDisplayParameters import BasicDisplayParameters
 from modules.ChromaticityCoordinates import ChromaticityCoordinates
 from modules.EstablishedTimingBitmap import EstablishedTimingBitmap
 from modules.StandardTimingInfo import StandardTimingInfo
+from modules.DetailedTimingDescriptor import DetailedTimingDescriptor
 
 import struct
 
 class Edid( EdidChunkContainer ):
 
     attributes = [ 'edid_header', 'basic_display_parameters', 'chromaticity_coordinates',
-                   'established_timings', 'standard_timing_info' ]
+                   'established_timings', 'standard_timing_info', 'detailed_descriptor1',
+                   'detailed_descriptor2', 'detailed_descriptor3', 'detailed_descriptor4' ]
 
     def __init__( self ):
 
@@ -20,6 +22,10 @@ class Edid( EdidChunkContainer ):
         self.chromaticity_coordinates = ChromaticityCoordinates()
         self.established_timings = EstablishedTimingBitmap()
         self.standard_timing_info = StandardTimingInfo()
+        self.detailed_descriptor1 = DetailedTimingDescriptor( 0x36 )
+        self.detailed_descriptor2 = DetailedTimingDescriptor( 0x48 )
+        self.detailed_descriptor3 = DetailedTimingDescriptor( 0x5A )
+        self.detailed_descriptor4 = DetailedTimingDescriptor( 0x6C )
 
     def load_from_file( self, file_path ):
 
