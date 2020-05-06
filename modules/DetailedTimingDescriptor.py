@@ -3,9 +3,6 @@ from modules.EdidChunkContainer import EdidChunkContainer
 from modules.PixelClock import PixelClock
 from modules.HzAddressableVideo import HzAddressableVideo
 
-# If questioning any of the hex values I'm using, I find its easiest
-# to convert them to binary, so it's easier to see their values.
-
 # Also known as '18-byte Descriptor' or 'Detailed Timing Blocks'. 	
 class DetailedTimingDescriptor( EdidChunk ):
 
