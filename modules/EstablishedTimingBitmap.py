@@ -1,7 +1,7 @@
 from modules.EdidChunk import EdidChunk
 
-class EstablishedTimingBitmap( EdidChunk ):
 
+class EstablishedTimingBitmap(EdidChunk):
     timings = {
         0: {
             7: "720x400 @ 70 Hz (VGA)",
@@ -30,31 +30,30 @@ class EstablishedTimingBitmap( EdidChunk ):
         }
     }
 
-    def __init__( self ):
+    def __init__(self):
 
-        super( EstablishedTimingBitmap, self ).__init__( "Established Timing Modes", 35, 3 )
+        super(EstablishedTimingBitmap, self).__init__("Established Timing Modes", 35, 3)
 
-    def get_supported_timings( self ):
+    def get_supported_timings(self):
 
-         timings = []
+        timings = []
 
-         for idx, bitfield in enumerate( self.bytes ):
+        for idx, bitfield in enumerate(self.bytes):
 
-             for key, val in self.timings[idx].items():
+            for key, val in self.timings[idx].items():
 
-                 timing_supported = ( bitfield >> key ) & 1
+                timing_supported = (bitfield >> key) & 1
 
-                 if timing_supported:
+                if timing_supported:
+                    timings.append(val)
 
-                     timings.append( val )
+        return timings
 
-         return timings
-
-    def human_readable( self, indent_no = 0 ):
+    def human_readable(self, indent_no=0):
 
         supported = self.get_supported_timings()
 
-        if len( supported ) == 0:
+        if len(supported) == 0:
             return "Unused"
         else:
-            return "".join( [ "\n{}".format( self.indented( timing, indent_no + 1 ) ) for timing in supported ] )
+            return "".join(["\n{}".format(self.indented(timing, indent_no + 1)) for timing in supported])

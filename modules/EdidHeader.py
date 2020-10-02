@@ -6,14 +6,13 @@ from modules.SerialNumber import SerialNumber
 from modules.ManufactureDate import ManufactureDate
 from modules.Version import Version
 
-class EdidHeader( EdidChunkContainer ):
 
-    attributes = [ 'header_pattern', 'manufacturer_id', 'product_code',
-                   'serial_number', 'manufacture_date', 'version' ]
+class EdidHeader(EdidChunkContainer):
+    attributes = ['header_pattern', 'manufacturer_id', 'product_code',
+                  'serial_number', 'manufacture_date', 'version']
 
-    def __init__( self ):
-
-        super( EdidHeader, self ).__init__( "Header", 0, 20 )
+    def __init__(self):
+        super(EdidHeader, self).__init__("Header", 0, 20)
 
         self.header_pattern = FixedHeaderPattern()
         self.manufacturer_id = ManufacturerId()
